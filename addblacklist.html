@@ -38,6 +38,7 @@
 
       const apiUrl = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist`;
 
+      console.log(pwd);
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -46,7 +47,7 @@
           },
           body: JSON.stringify({
             'pwd': pwd,
-            'userId': userId,
+            'user_id': userId,
             'note': note
           })
         });
