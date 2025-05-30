@@ -23,6 +23,12 @@
     margin-right: 4px;
     font-size: 14px;
   }
+  p {
+      background-color: #1e1e1e; /* 深色背景以便浅色字体更清晰 */
+      color: #ccc;               /* 浅色字体 */
+      font-size: 12px;           /* 小字体 */
+      font-family: Arial, sans-serif;
+    }
 </style>
 </head>
 <body>
@@ -79,7 +85,7 @@
           const tr = document.createElement('tr');
 
           tr.innerHTML = `
-            <td>${user.username}(${user.user_id})</br>speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</td>
+            <td>${user.username}(${user.user_id})</br><p>speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</p></td>
             <td>
               <button class="details-btn">白名单</button>
               <button class="delete-btn">移除</button>
