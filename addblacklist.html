@@ -19,11 +19,12 @@
         return;
       }
 
-      const url = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist?pwd=${encodeURIComponent(pwd)}`;
+      const url = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist`;
 
       const payload = {
-        user_id: userId,
-        note: note
+        ‘pwd’:encodeURIComponent(pwd),
+        ‘user_id’: userId,
+        ‘note': note
       };
 
       try {
