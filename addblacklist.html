@@ -34,11 +34,11 @@
 
       const userId = document.getElementById('user_id').value;
       const note = document.getElementById('note').value;
-      const pwd = pwd=${encodeURIComponent(pwd)};
+      const pwd111 = ${encodeURIComponent(pwd)};
 
       const apiUrl = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist`;
 
-      console.log(pwd);
+      console.log(pwd111);
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -46,7 +46,7 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            'pwd': pwd,
+            'pwd': pwd111,
             'user_id': userId,
             'note': note
           })
