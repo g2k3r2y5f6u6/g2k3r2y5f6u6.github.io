@@ -32,10 +32,11 @@
         return;
       }
 
-      const user_id = document.getElementById('user_id').value;
+      const userId = document.getElementById('user_id').value;
       const note = document.getElementById('note').value;
+      const pwd = pwd=${encodeURIComponent(pwd)};
 
-      const apiUrl = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist?pwd=${encodeURIComponent(pwd)}`;
+      const apiUrl = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -44,8 +45,9 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            user_id,
-            note
+            'pwd': pwd,
+            'userId': userId,
+            'note': note
           })
         });
 
