@@ -33,7 +33,6 @@
   <thead>
     <tr>
       <th>User ID</th>
-      <th>First Join At</th>
       <th>Speech Count</th>
       <th>Join Day</th>
       <th>操作</th>
@@ -82,8 +81,7 @@
           const tr = document.createElement('tr');
 
           tr.innerHTML = `
-            <td>${user.user_id}(${user.username})</td>
-            <td>${user.first_join_at}</td>
+            <td>${user.username}(${user.user_id})</td>
             <td>${user.speech_count}</td>
             <td>${user.join_day.toFixed(2)}</td>
             <td>
