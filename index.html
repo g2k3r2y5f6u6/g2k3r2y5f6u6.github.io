@@ -27,7 +27,7 @@
 </head>
 <body>
 
-<h1>Silent User Table</h1>
+<a href="#" onclick="jumpWithParams(event)">白名单</a>
 
 <table id="userTable" style="display:none;">
   <thead>
@@ -134,6 +134,13 @@
       console.error(err);
       alert('请求出错: ' + err);
     }
+  }
+
+  function jumpWithParams(event) {
+    event.preventDefault();
+    const currentParams = window.location.search; 
+    const targetPage = "whitelist.html";            
+    window.location.href = targetPage + currentParams;
   }
 
   // 页面加载完成时自动调用
