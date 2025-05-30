@@ -27,7 +27,8 @@
 </head>
 <body>
 
-<a href="#" onclick="jumpWithParams(event)">白名单</a>
+<a href="#" onclick="jumpWithParams(event,"whitelist.html")">白名单</a>
+<a href="#" onclick="jumpWithParams(event,"addblacklist.html")">添加黑名单</a>
 
 <table id="userTable" style="display:none;">
   <thead>
@@ -136,10 +137,9 @@
     }
   }
 
-  function jumpWithParams(event) {
+  function jumpWithParams(event,targetPage) {
     event.preventDefault();
-    const currentParams = window.location.search; 
-    const targetPage = "whitelist.html";            
+    const currentParams = window.location.search;            
     window.location.href = targetPage + currentParams;
   }
 
