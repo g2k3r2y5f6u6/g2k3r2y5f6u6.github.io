@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <title>添加到黑名单</title>
-</head>
-<body>
-  <h2>添加用户到黑名单</h2>
-
-  <form id="blacklistForm" method="post" action="https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist">
-    <label for="user_id">用户 ID:</label><br />
-    <input type="text" id="user_id" name="user_id" required /><br /><br />
-
-    <label for="note">备注:</label><br />
-    <input type="text" id="note" name="note" /><br /><br />
-
-    <!-- 隐藏密码字段 -->
-    <input type="hidden" id="pwd" name="pwd" />
-
-    <button type="submit">提交</button>
-  </form>
-
+  <meta charset="UTF-8">
+  <title>添加黑名单</title>
   <script>
-    // 页面加载完成后，自动从 URL 获取 pwd 并赋值给隐藏字段
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const pwd = urlParams.get('pwd');
-      if (!pwd) {
-        alert('缺少 pwd 参数！');
+    function getPwdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('pwd');
+    }
+
+    async function addToBlacklist() {
+      const userId = document.getElementById('user_id').value.trim();
+      const note = document.getElementById('note').value.trim();
+      const pwd = getPwdFromURL();
+
+      if (!pwd || !userId) {
+        alert("缺少必要参数（pwd 或 user_id）");
         return;
       }
-      document.getElementById('pwd').value = pwd;
-    });
+
+      const url = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist?pwd=${encodeURIComponent(pwd)}`;
+
+      const payload = {
+        user_id: userId,
+        note: note
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        alert("提交成功：" + JSON.stringify(result));
+
+        // 清空文本框
+        document.getElementById('user_id').value = '';
+        document.getElementById('note').value = '';
+      } catch (error) {
+        alert("提交失败：" + error);
+      }
+    }
   </script>
+</head>
+<body>
+  <h2>添加到黑名单</h2>
+  <label for="user_id">User ID:</label><br>
+  <input type="text" id="user_id" placeholder="输入用户 ID"><br><br>
+
+  <label for="note">备注:</label><br>
+  <input type="text" id="note" placeholder="输入备注信息"><br><br>
+
+  <button onclick="addToBlacklist()">提交</button>
 </body>
 </html>
