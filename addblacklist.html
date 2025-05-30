@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>添加到黑名单</title>
+</head>
+<body>
+  <h2>添加用户到黑名单</h2>
+
+  <form id="blacklistForm">
+    <label for="user_id">用户 ID:</label><br>
+    <input type="text" id="user_id" name="user_id" required><br><br>
+
+    <label for="note">备注:</label><br>
+    <input type="text" id="note" name="note"><br><br>
+
+    <button type="submit">提交</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    document.getElementById('blacklistForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // 获取 URL 参数中的 pwd
+      const urlParams = new URLSearchParams(window.location.search);
+      const pwd = urlParams.get('pwd');
+
+      if (!pwd) {
+        alert("缺少 pwd 参数！");
+        return;
+      }
+
+      const user_id = document.getElementById('user_id').value;
+      const note = document.getElementById('note').value;
+
+      const apiUrl = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist?pwd=${encodeURIComponent(pwd)}`;
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id,
+            note
+          })
+        });
+
+        const result = await response.json();
+        document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        document.getElementById('response').textContent = '请求失败: ' + error;
+      }
+    });
+  </script>
+</body>
+</html>
