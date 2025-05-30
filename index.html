@@ -32,9 +32,7 @@
 <table id="userTable" style="display:none;">
   <thead>
     <tr>
-      <th>User ID</th>
-      <th>Speech Count</th>
-      <th>Join Day</th>
+      <th></th>
       <th>操作</th>
     </tr>
   </thead>
@@ -81,9 +79,7 @@
           const tr = document.createElement('tr');
 
           tr.innerHTML = `
-            <td>${user.username}(${user.user_id})</td>
-            <td>${user.speech_count}</td>
-            <td>${user.join_day.toFixed(2)}</td>
+            <td>${user.username}(${user.user_id})</br>speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</td>
             <td>
               <button class="details-btn">白名单</button>
               <button class="delete-btn">移除</button>
