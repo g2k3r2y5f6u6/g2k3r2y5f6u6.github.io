@@ -36,9 +36,6 @@
           body: JSON.stringify(payload)
         });
 
-        const result = await response.json();
-        alert("提交成功：" + JSON.stringify(result));
-
         // 清空文本框
         document.getElementById('user_id').value = '';
         document.getElementById('note').value = '';
