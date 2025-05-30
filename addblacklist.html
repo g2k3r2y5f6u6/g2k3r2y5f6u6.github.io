@@ -27,7 +27,7 @@
         'note': note
       };
 
-      try {
+
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -42,9 +42,7 @@
         // 清空文本框
         document.getElementById('user_id').value = '';
         document.getElementById('note').value = '';
-      } catch (error) {
-        alert("提交失败：" + error);
-      }
+
     }
   </script>
 </head>
