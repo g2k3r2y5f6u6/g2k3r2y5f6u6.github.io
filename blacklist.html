@@ -142,20 +142,17 @@
 
             // 绑定事件监听器在循环内，避免作用域问题
             tr.querySelector('.details-btn').addEventListener('click', async () => {
-              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, user.note || '');
-              if (reason !== null && reason.trim() !== "") {
-                await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    'pwd': pwd1,
-                    'user_id': user.user_id,
-                    'note': reason.trim()
-                  })
-                });
-                // 可选：更新备注显示
-                tr.querySelector('div:nth-child(2)').textContent = reason.trim();
-              }
+              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, tr.querySelector('div:nth-child(2)').textContent || '');
+              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  'pwd': pwd1,
+                  'user_id': user.user_id,
+                  'note': reason.trim()
+                })
+              });
+              tr.querySelector('div:nth-child(2)').textContent = reason.trim();
             });
 
             tbody.appendChild(tr);
