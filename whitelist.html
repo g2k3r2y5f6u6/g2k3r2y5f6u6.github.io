@@ -133,7 +133,7 @@
             tr.innerHTML = `
               <td data-label="沉默用户">
                 <div style="font-weight:bold;">${user.username} (${user.user_id})</div>
-                <div style="font-size: 12px; color: #666;">${user.note || speech: ${user.speech_count}}</div>
+                <div style="font-size: 12px; color: #666;">${user.note || 'speech:' + user.speech_count}</div>
               </td>
               <td data-label="操作" class="actions">
                 <button class="note-btn">备注</button>
