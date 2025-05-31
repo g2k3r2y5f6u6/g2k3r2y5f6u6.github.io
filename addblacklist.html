@@ -48,11 +48,13 @@
     }
 
     button {
-      background-color: #007bff;
-      color: white;
-      border: none;
+      padding: 6px 12px;
+      margin: 2px 0;
+      font-size: 14px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background-color: #f9f9f9;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
     button:hover {
@@ -122,8 +124,6 @@
 </head>
 <body>
   <div class="container">
-    <h2>黑名单管理</h2>
-
     <label for="action">操作：</label>
     <select id="action" onchange="handleActionChange()">
       <option value="add">加入黑名单</option>
