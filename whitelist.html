@@ -136,6 +136,7 @@
                 <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}   ${user.note}</div>
               </td>
               <td data-label="操作" class="actions">
+                <button class="note-btn">备注</button>
                 <button class="details-btn">移除白名单</button>
               </td>
             `;
@@ -150,6 +151,21 @@
                 });
               }
             });
+
+            tr.querySelector('.note-btn').addEventListener('click', async () => {
+              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, tr.querySelector('div:nth-child(2)').textContent || '');
+              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  'pwd': pwd1,
+                  'user_id': user.user_id,
+                  'note': reason.trim()
+                })
+              });
+              tr.querySelector('div:nth-child(2)').textContent = reason.trim();
+            });
+
 
             tbody.appendChild(tr);
           });
