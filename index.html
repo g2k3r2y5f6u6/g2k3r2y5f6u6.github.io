@@ -87,35 +87,64 @@
     button:hover {
       background-color: #eee;
     }
-
-    @media screen and (max-width: 600px) {
-      td {
-        font-size: 13px;
+    
+    @media screen and (max-width: 400px) {
+      table, thead, tbody, th, td, tr {
         display: block;
-        width: 100%;
+      }
+
+      thead tr {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 1em;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 10px;
+        background: #fff;
+      }
+
+      td {
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+        font-size: 14px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      td::before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #333;
+        content: attr(data-label);
       }
 
       td.actions {
         text-align: left;
-        margin-top: 8px;
-      }
-
-      tr {
-        display: block;
-        margin-bottom: 1em;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        overflow: hidden;
+        padding-left: 10px;
+        white-space: normal;
       }
 
       button {
-        font-size: 13px;
-        width: 100%;
+        width: 48%;
+        margin: 4px 1% 4px 0;
+        font-size: 14px;
         box-sizing: border-box;
-      }
-
-      th {
-        display: none;
+        white-space: normal;
+        word-break: break-word;
       }
     }
   </style>
@@ -167,11 +196,11 @@
             const tr = document.createElement('tr');
 
             tr.innerHTML = `
-              <td>
+              <td data-label="沉默用户">
                 <div style="font-weight:bold;">${user.username} (${user.user_id})</div>
                 <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</div>
               </td>
-              <td class="actions">
+              <td data-label="操作" class="actions">
                 <button class="details-btn">白名单</button>
                 <button class="delete-btn">移除</button>
               </td>
@@ -203,20 +232,4 @@
           });
         }
 
-        table.style.display = 'table';
-      } catch (err) {
-        console.error(err);
-        alert('请求出错: ' + err.message);
-      }
-    }
-
-    function jumpWithParams(event, targetPage) {
-      event.preventDefault();
-      const currentParams = window.location.search;
-      window.location.href = targetPage + currentParams;
-    }
-
-    window.addEventListener('DOMContentLoaded', loadData);
-  </script>
-</body>
-</html>
+        table.style.display = 'table
