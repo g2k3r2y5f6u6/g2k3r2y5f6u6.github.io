@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>黑名单</title>
+</head>
+<body>
+  <table border="1" id="result" style="margin-top: 20px; display: none;">
+    <thead>
+      <tr>
+        <th>用户名</th>
+        <th>发言次数</th>
+        <th>用户ID</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <script>
+    function getPwdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("pwd");
+    }
+
+    function check(pwd) {
+      fetch("https://wandering-glitter-5345.completeforyou.workers.dev/api/blacklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 'pwd': pwd })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("tbody");
+        tbody.innerHTML = "";
+        data.forEach(item => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${item.username}</td>
+              <td>${item.speech_count}</td>
+              <td>${item.user_id}</td>
+              <td>${item.note}</td>
+            </tr>
+          `;
+        });
+        document.getElementById("result").style.display = "table";
+      })
+      .catch(err => alert("请求失败：" + err));
+    }
+
+    const pwd = getPwdFromUrl();
+    if (pwd) {
+      check(pwd);
+    } else {
+      document.body.innerHTML += "<p style='color:red;'>缺少 URL 参数：pwd</p>";
+    }
+  </script>
+</body>
+</html>
 
