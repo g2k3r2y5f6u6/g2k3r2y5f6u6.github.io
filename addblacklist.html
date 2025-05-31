@@ -16,10 +16,15 @@
     .container {
       max-width: 800px;
       width: 100%;
+      background: white;
+      padding: 1em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border-radius: 6px;
     }
 
     a {
-      margin-right: 10px;
+      display: inline-block;
+      margin-bottom: 1em;
       text-decoration: none;
       color: #007bff;
       font-weight: bold;
@@ -29,45 +34,17 @@
       text-decoration: underline;
     }
 
-    .table-container {
-      overflow-x: auto;
-      margin-top: 1em;
-      background: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    label {
+      display: block;
+      margin-top: 0.7em;
+      margin-bottom: 0.3em;
     }
 
-    table {
-      border-collapse: separate;
-      border-spacing: 0;
+    input, select {
       width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      border-left: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-    }
-
-    th, td {
-      border-bottom: 1px solid #ccc;
-      padding: 10px 12px;
-      text-align: left;
-      vertical-align: top;
-      word-break: break-word;
-      white-space: normal;
-    }
-
-    th {
-      border-top: 1px solid #ccc;
-      background: #f0f0f0;
-      white-space: nowrap;
-    }
-
-    thead th {
-      border-bottom: 1px solid #ccc;
-    }
-
-    td.actions {
-      text-align: right;
-      white-space: nowrap;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
     }
 
     button {
@@ -95,9 +72,7 @@
       const action = document.getElementById('action').value;
       const noteField = document.getElementById('note');
       noteField.disabled = (action === 'remove');
-      if (action === 'remove') {
-        noteField.value = '';
-      }
+      if (action === 'remove') noteField.value = '';
     }
 
     async function submitForm() {
@@ -115,21 +90,13 @@
         ? 'https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist'
         : 'https://wandering-glitter-5345.completeforyou.workers.dev/api/removeFromBlacklist';
 
-      const payload = {
-        'pwd': pwd,
-        'user_id': userId
-      };
-
-      if (action === 'add') {
-        payload.note = note;
-      }
+      const payload = { pwd, user_id: userId };
+      if (action === 'add') payload.note = note;
 
       try {
         const response = await fetch(url, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
@@ -149,10 +116,9 @@
   </script>
 </head>
 <body>
-  
-  
   <div class="container">
     <a href="#" onclick="jumpWithParams(event, 'index.html')">返回</a>
+
     <label for="action">操作类型：</label>
     <select id="action" onchange="handleActionChange()">
       <option value="add">加入黑名单</option>
