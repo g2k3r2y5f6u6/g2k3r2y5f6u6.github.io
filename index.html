@@ -1,27 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Silent User Table</title>
 <style>
+  body {
+    font-family: sans-serif;
+    margin: 1em;
+  }
+
+  a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007bff;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-top: 1em;
+  }
+
   table {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 1em;
+    min-width: 500px;
   }
+
   th, td {
     border: 1px solid #ccc;
-    padding: 8px 12px;
+    padding: 10px 12px;
     text-align: left;
+    vertical-align: top;
   }
+
   th {
     background: #f0f0f0;
+    white-space: nowrap;
   }
+
   button {
-    padding: 6px 10px;
-    margin-right: 4px;
+    padding: 6px 12px;
+    margin: 2px;
     font-size: 14px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #eee;
+  }
+
+  @media screen and (max-width: 600px) {
+    td {
+      font-size: 13px;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
   }
 </style>
 </head>
@@ -30,17 +73,19 @@
 <a href="#" onclick="jumpWithParams(event,'whitelist.html')">白名单</a>
 <a href="#" onclick="jumpWithParams(event,'addblacklist.html')">添加黑名单</a>
 
-<table id="userTable" style="display:none;">
-  <thead>
-    <tr>
-      <th></th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- 数据行会插入这里 -->
-  </tbody>
-</table>
+<div class="table-container">
+  <table id="userTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>用户信息</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 数据行将被插入这里 -->
+    </tbody>
+  </table>
+</div>
 
 <script>
   const table = document.getElementById('userTable');
@@ -48,10 +93,9 @@
 
   async function loadData() {
     try {
-
       const url = new URL(window.location.href);
       const pwd1 = url.searchParams.get("pwd");
-      
+
       const response = await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/silentUser', {
         method: 'POST',
         headers: {
@@ -60,30 +104,23 @@
         body: JSON.stringify({ 'pwd': pwd1 })
       });
 
-
       if (!response.ok) {
         throw new Error('网络错误: ' + response.status);
       }
 
       const data = await response.json();
-
-      
       tbody.innerHTML = '';
 
       if (!Array.isArray(data) || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6">无数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="2">无数据</td></tr>';
       } else {
         data.forEach(user => {
           const tr = document.createElement('tr');
 
           tr.innerHTML = `
-            <td style="padding: 4px;">
-              <div style="font-size: 12px; color: #222;">
-                ${user.username} (${user.user_id})
-              </div>
-              <div style="font-size: 9px; color: #999; margin-top: 2px;">
-                speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}
-              </div>
+            <td>
+              <div style="font-weight:bold;">${user.username} (${user.user_id})</div>
+              <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</div>
             </td>
             <td>
               <button class="details-btn">白名单</button>
@@ -91,59 +128,47 @@
             </td>
           `;
 
-          
-          // Add to whitelist
+          // 白名单
           tr.querySelector('.details-btn').addEventListener('click', async () => {
-            if (confirm(`添加到白名单: ${user.username}（ID: ${user.user_id}`)) {
-
-              tr.remove(); // 从 DOM 中移除这一行
-              
-              const response = await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/addToWhitelist', {
+            if (confirm(`添加到白名单: ${user.username}（ID: ${user.user_id}）？`)) {
+              tr.remove();
+              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/addToWhitelist', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                }, 
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
               });
-              
             }
           });
 
-          // Add to blacklist
+          // 移除
           tr.querySelector('.delete-btn').addEventListener('click', async () => {
-            if (confirm(`确定要移除用户: ${user.username}（ID: ${user.user_id}）吗？`)) {
-
-              tr.remove(); // 从 DOM 中移除这一行
-              
-              const response = await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/kickUser', {
+            if (confirm(`确定要移除用户: ${user.username}（ID: ${user.user_id}）？`)) {
+              tr.remove();
+              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/kickUser', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                }, 
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
               });
             }
           });
 
           tbody.appendChild(tr);
-          
         });
       }
 
       table.style.display = 'table';
     } catch (err) {
       console.error(err);
-      alert('请求出错: ' + err);
+      alert('请求出错: ' + err.message);
     }
   }
 
-  function jumpWithParams(event,targetPage) {
+  function jumpWithParams(event, targetPage) {
     event.preventDefault();
-    const currentParams = window.location.search;            
+    const currentParams = window.location.search;
     window.location.href = targetPage + currentParams;
   }
 
-  // 页面加载完成时自动调用
   window.addEventListener('DOMContentLoaded', loadData);
 </script>
 
