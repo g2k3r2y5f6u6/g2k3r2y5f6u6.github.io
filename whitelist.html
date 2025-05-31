@@ -133,7 +133,7 @@
             tr.innerHTML = `
               <td data-label="沉默用户">
                 <div style="font-weight:bold;">${user.username} (${user.user_id})</div>
-                <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}   ${user.note}</div>
+                <div style="font-size: 12px; color: #666;">${user.note || speech: ${user.speech_count}}</div>
               </td>
               <td data-label="操作" class="actions">
                 <button class="note-btn">备注</button>
@@ -153,7 +153,7 @@
             });
 
             tr.querySelector('.note-btn').addEventListener('click', async () => {
-              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, tr.querySelector('div:nth-child(2)').textContent || '');
+              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, user.note || '');
               await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
