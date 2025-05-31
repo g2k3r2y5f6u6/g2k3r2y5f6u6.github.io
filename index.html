@@ -33,19 +33,23 @@
   }
 
   table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
-    table-layout: fixed;
+    max-width: 800px;
+    margin: 1em auto;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
   }
 
   th, td {
     border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  padding: 10px 12px;
-  text-align: left;
-  vertical-align: top;
-  word-break: break-word;
-  white-space: normal;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    word-break: break-word;
+    white-space: normal;
   }
 
   th {
