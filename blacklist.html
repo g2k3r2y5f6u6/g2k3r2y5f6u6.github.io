@@ -136,6 +136,7 @@
                 <div style="font-size: 12px; color: #666;">${user.note}</div>
               </td>
               <td data-label="" class="actions">
+                <button class="details-btn">备注</button>
               </td>
             `;
 
@@ -143,6 +144,21 @@
           });
         }
 
+        tr.querySelector('.details-btn').addEventListener('click', async () => {
+          const reason = prompt(`请输入标记原因（用户：${user.username}，ID：${user.user_id}）：`);
+          if (reason !== null && reason.trim() !== "") {
+            await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                'pwd': pwd1,
+                'user_id': user.user_id,
+                'note': reason.trim()
+              })
+            });
+          }
+        });
+        
         table.style.display = 'table';
       } catch (err) {
         console.error(err);
