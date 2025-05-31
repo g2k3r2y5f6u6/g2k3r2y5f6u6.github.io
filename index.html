@@ -87,7 +87,8 @@
     button:hover {
       background-color: #eee;
     }
-    
+
+    /* 适配小屏，尤其是iPhone SE 2 */
     @media screen and (max-width: 400px) {
       table, thead, tbody, th, td, tr {
         display: block;
@@ -232,4 +233,20 @@
           });
         }
 
-        table.style.display = 'table
+        table.style.display = 'table';
+      } catch (err) {
+        console.error(err);
+        alert('请求出错: ' + err.message);
+      }
+    }
+
+    function jumpWithParams(event, targetPage) {
+      event.preventDefault();
+      const currentParams = window.location.search;
+      window.location.href = targetPage + currentParams;
+    }
+
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
