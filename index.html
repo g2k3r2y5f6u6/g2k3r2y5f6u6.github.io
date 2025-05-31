@@ -1,98 +1,128 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Yu2 Bot</title>
-<style>
-  body {
-    font-family: sans-serif;
-    margin: 1em;
-    display: flex;
-    justify-content: center;
-  }
-
-  .table-wrapper {
-    max-width: 800px;
-    width: 100%;
-  }
-
-  a {
-    margin-right: 10px;
-    text-decoration: none;
-    color: #007bff;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .table-container {
-    overflow-x: auto;
-    margin-top: 1em;
-  }
-
-  table {
-    border-collapse: separate;
-    border-spacing: 0;
-    width: 100%;
-    max-width: 800px;
-    margin: 1em auto;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-  }
-
-  th, td {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 12px;
-    text-align: left;
-    vertical-align: top;
-    word-break: break-word;
-    white-space: normal;
-  }
-
-  th {
-    background: #f0f0f0;
-    white-space: nowrap;
-  }
-
-  thead th {
-    border-bottom: 1px solid #ccc;
-  }
-  
-  td.actions {
-    text-align: right;
-  }
-
-  button {
-    padding: 6px 12px;
-    margin: 2px;
-    font-size: 14px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #eee;
-  }
-
-  @media screen and (max-width: 600px) {
-    td {
-      font-size: 13px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yu2 Bot</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 1em;
+      display: flex;
+      justify-content: center;
+      background-color: #f8f9fa;
     }
+
+    .table-wrapper {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1em;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+    }
+
+    th, td {
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    th {
+      background: #f0f0f0;
+      white-space: nowrap;
+    }
+
+    thead th {
+      border-bottom: 1px solid #ccc;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    td.actions {
+      text-align: right;
+      white-space: nowrap;
+    }
+
     button {
-      padding: 5px 10px;
-      font-size: 12px;
+      padding: 6px 12px;
+      margin: 2px 0;
+      font-size: 14px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      cursor: pointer;
     }
-  }
-</style>
+
+    button:hover {
+      background-color: #eee;
+    }
+
+    @media screen and (max-width: 600px) {
+      td {
+        font-size: 13px;
+        display: block;
+        width: 100%;
+      }
+
+      td.actions {
+        text-align: left;
+        margin-top: 8px;
+      }
+
+      tr {
+        display: block;
+        margin-bottom: 1em;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      button {
+        font-size: 13px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      th {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="table-wrapper">
-
     <a href="#" onclick="jumpWithParams(event,'whitelist.html')">白名单</a>
     <a href="#" onclick="jumpWithParams(event,'addblacklist.html')">添加黑名单</a>
 
@@ -101,100 +131,93 @@
         <thead>
           <tr>
             <th>沉默用户</th>
-            <th></th>
+            <th>操作</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- 数据行将被插入这里 -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
-  
-<script>
-  const table = document.getElementById('userTable');
-  const tbody = table.querySelector('tbody');
 
-  async function loadData() {
-    try {
-      const url = new URL(window.location.href);
-      const pwd1 = url.searchParams.get("pwd");
+  <script>
+    const table = document.getElementById('userTable');
+    const tbody = table.querySelector('tbody');
 
-      const response = await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/silentUser', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify({ 'pwd': pwd1 })
-      });
+    async function loadData() {
+      try {
+        const url = new URL(window.location.href);
+        const pwd1 = url.searchParams.get("pwd");
 
-      if (!response.ok) {
-        throw new Error('网络错误: ' + response.status);
-      }
-
-      const data = await response.json();
-      tbody.innerHTML = '';
-
-      if (!Array.isArray(data) || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="2">无数据</td></tr>';
-      } else {
-        data.forEach(user => {
-          const tr = document.createElement('tr');
-
-          tr.innerHTML = `
-            <td>
-              <div style="font-weight:bold; word-break: break-word;">${user.username} (${user.user_id})</div>
-              <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</div>
-            </td>
-            <td class="actions">
-              <button class="details-btn">白名单</button>
-              <button class="delete-btn">移除</button>
-            </td>
-          `;
-
-          // 白名单
-          tr.querySelector('.details-btn').addEventListener('click', async () => {
-            if (confirm(`添加到白名单: ${user.username}（ID: ${user.user_id}）？`)) {
-              tr.remove();
-              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/addToWhitelist', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
-              });
-            }
-          });
-
-          // 移除
-          tr.querySelector('.delete-btn').addEventListener('click', async () => {
-            if (confirm(`确定要移除用户: ${user.username}（ID: ${user.user_id}）？`)) {
-              tr.remove();
-              await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/kickUser', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
-              });
-            }
-          });
-
-          tbody.appendChild(tr);
+        const response = await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/silentUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 'pwd': pwd1 })
         });
+
+        if (!response.ok) {
+          throw new Error('网络错误: ' + response.status);
+        }
+
+        const data = await response.json();
+        tbody.innerHTML = '';
+
+        if (!Array.isArray(data) || data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="2">无数据</td></tr>';
+        } else {
+          data.forEach(user => {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+              <td>
+                <div style="font-weight:bold;">${user.username} (${user.user_id})</div>
+                <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</div>
+              </td>
+              <td class="actions">
+                <button class="details-btn">白名单</button>
+                <button class="delete-btn">移除</button>
+              </td>
+            `;
+
+            tr.querySelector('.details-btn').addEventListener('click', async () => {
+              if (confirm(`添加到白名单: ${user.username}（ID: ${user.user_id}）？`)) {
+                tr.remove();
+                await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/addToWhitelist', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
+                });
+              }
+            });
+
+            tr.querySelector('.delete-btn').addEventListener('click', async () => {
+              if (confirm(`确定要移除用户: ${user.username}（ID: ${user.user_id}）？`)) {
+                tr.remove();
+                await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/kickUser', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
+                });
+              }
+            });
+
+            tbody.appendChild(tr);
+          });
+        }
+
+        table.style.display = 'table';
+      } catch (err) {
+        console.error(err);
+        alert('请求出错: ' + err.message);
       }
-
-      table.style.display = 'table';
-    } catch (err) {
-      console.error(err);
-      alert('请求出错: ' + err.message);
     }
-  }
 
-  function jumpWithParams(event, targetPage) {
-    event.preventDefault();
-    const currentParams = window.location.search;
-    window.location.href = targetPage + currentParams;
-  }
+    function jumpWithParams(event, targetPage) {
+      event.preventDefault();
+      const currentParams = window.location.search;
+      window.location.href = targetPage + currentParams;
+    }
 
-  window.addEventListener('DOMContentLoaded', loadData);
-</script>
-
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
 </body>
 </html>
