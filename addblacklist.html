@@ -2,16 +2,83 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>添加黑名单</title>
+  <title>管理黑名单</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5em;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+      color: #555;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1em;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
   <script>
     function getPwdFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('pwd');
     }
 
-    async function addToBlacklist() {
+    function handleActionChange() {
+      const action = document.getElementById('action').value;
+      const noteField = document.getElementById('note');
+      noteField.disabled = (action === 'remove');
+      if (action === 'remove') {
+        noteField.value = '';
+      }
+    }
+
+    async function submitForm() {
       const userId = document.getElementById('user_id').value.trim();
       const note = document.getElementById('note').value.trim();
+      const action = document.getElementById('action').value;
       const pwd = getPwdFromURL();
 
       if (!pwd || !userId) {
@@ -19,15 +86,20 @@
         return;
       }
 
-      const url = `https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist`;
+      const url = action === 'add'
+        ? 'https://wandering-glitter-5345.completeforyou.workers.dev/api/addToBlacklist'
+        : 'https://wandering-glitter-5345.completeforyou.workers.dev/api/removeFromBlacklist';
 
       const payload = {
         'pwd': pwd,
-        'user_id': userId,
-        'note': note
+        'user_id': userId
       };
 
+      if (action === 'add') {
+        payload.note = note;
+      }
 
+      try {
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -36,21 +108,36 @@
           body: JSON.stringify(payload)
         });
 
-        // 清空文本框
+        if (!response.ok) {
+          throw new Error('请求失败：' + response.status);
+        }
+
+        alert(action === 'add' ? '已加入黑名单' : '已移除黑名单');
         document.getElementById('user_id').value = '';
         document.getElementById('note').value = '';
-
+      } catch (err) {
+        alert('操作失败: ' + err.message);
+      }
     }
   </script>
 </head>
 <body>
-  <h2>添加到黑名单</h2>
-  <label for="user_id">User ID:</label><br>
-  <input type="text" id="user_id" placeholder="输入用户 ID"><br><br>
+  <div class="container">
+    <h2>黑名单管理</h2>
 
-  <label for="note">备注:</label><br>
-  <input type="text" id="note" placeholder="输入备注信息"><br><br>
+    <label for="action">操作：</label>
+    <select id="action" onchange="handleActionChange()">
+      <option value="add">加入黑名单</option>
+      <option value="remove">移除黑名单</option>
+    </select>
 
-  <button onclick="addToBlacklist()">提交</button>
+    <label for="user_id">用户 ID：</label>
+    <input type="text" id="user_id" placeholder="输入用户 ID">
+
+    <label for="note">备注：</label>
+    <input type="text" id="note" placeholder="输入备注信息">
+
+    <button onclick="submitForm()">提交</button>
+  </div>
 </body>
 </html>
