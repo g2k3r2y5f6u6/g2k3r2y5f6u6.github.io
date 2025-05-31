@@ -139,17 +139,6 @@
               </td>
             `;
 
-            tr.querySelector('.details-btn').addEventListener('click', async () => {
-              if (confirm(`从白名单中移除 ${user.username}（ID: ${user.user_id}）？`)) {
-                tr.remove();
-                await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/removeFromWhitelist', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ 'pwd': pwd1, 'user_id': user.user_id })
-                });
-              }
-            });
-
             tbody.appendChild(tr);
           });
         }
