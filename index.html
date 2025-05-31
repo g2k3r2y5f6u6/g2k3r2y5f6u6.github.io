@@ -8,6 +8,13 @@
   body {
     font-family: sans-serif;
     margin: 1em;
+    display: flex;
+    justify-content: center;
+  }
+
+  .table-wrapper {
+    max-width: 800px;
+    width: 100%;
   }
 
   a {
@@ -45,6 +52,10 @@
     white-space: nowrap;
   }
 
+  td.actions {
+    text-align: right;
+  }
+
   button {
     padding: 6px 12px;
     margin: 2px;
@@ -71,24 +82,26 @@
 </style>
 </head>
 <body>
+  <div class="table-wrapper">
 
-<a href="#" onclick="jumpWithParams(event,'whitelist.html')">白名单</a>
-<a href="#" onclick="jumpWithParams(event,'addblacklist.html')">添加黑名单</a>
+    <a href="#" onclick="jumpWithParams(event,'whitelist.html')">白名单</a>
+    <a href="#" onclick="jumpWithParams(event,'addblacklist.html')">添加黑名单</a>
 
-<div class="table-container">
-  <table id="userTable" style="display:none;">
-    <thead>
-      <tr>
-        <th>用户信息</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- 数据行将被插入这里 -->
-    </tbody>
-  </table>
-</div>
-
+    <div class="table-container">
+      <table id="userTable" style="display:none;">
+        <thead>
+          <tr>
+            <th>用户信息</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 数据行将被插入这里 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
 <script>
   const table = document.getElementById('userTable');
   const tbody = table.querySelector('tbody');
@@ -124,7 +137,7 @@
               <div style="font-weight:bold; word-break: break-word;">${user.username} (${user.user_id})</div>
               <div style="font-size: 12px; color: #666;">speech: ${user.speech_count}, joining: ${user.join_day.toFixed(2)}</div>
             </td>
-            <td>
+            <td class="actions">
               <button class="details-btn">白名单</button>
               <button class="delete-btn">移除</button>
             </td>
