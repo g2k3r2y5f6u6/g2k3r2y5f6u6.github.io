@@ -9,51 +9,87 @@
       font-family: Arial, sans-serif;
       background-color: #f8f9fa;
       margin: 0;
-      padding: 2em;
+      padding: 0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
-    a {
-      margin-right: 10px;
+    .top-bar {
+      width: 100%;
+      background-color: #ffffff;
+      padding: 1em;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: flex-start;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .top-bar a {
       text-decoration: none;
       color: #007bff;
       font-weight: bold;
+      font-size: 16px;
     }
 
-    a:hover {
+    .top-bar a:hover {
       text-decoration: underline;
     }
-    
+
     .container {
+      background-color: #fff;
       padding: 2em;
+      margin-top: 3em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
     }
 
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5em;
+      color: #333;
+    }
+
     label {
       display: block;
-      margin-top: 0.6em;
+      margin-top: 1em;
       margin-bottom: 0.3em;
       color: #555;
     }
 
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 0.8em;
+    }
+
     button {
-      padding: 6px 12px;
-      margin: 2px 0;
-      font-size: 14px;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-      background-color: #f9f9f9;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+      margin-top: 1.5em;
+      transition: background-color 0.3s;
     }
 
     button:hover {
       background-color: #0056b3;
     }
   </style>
+
   <script>
     function getPwdFromURL() {
       const params = new URLSearchParams(window.location.search);
@@ -102,10 +138,6 @@
           body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-          throw new Error('请求失败：' + response.status);
-        }
-
         alert(action === 'add' ? '已加入黑名单' : '已移除黑名单');
         document.getElementById('user_id').value = '';
         document.getElementById('note').value = '';
@@ -113,22 +145,32 @@
         alert('操作失败: ' + err.message);
       }
     }
+
+    function jumpWithParams(event, targetPage) {
+      event.preventDefault();
+      const currentParams = window.location.search;
+      window.location.href = targetPage + currentParams;
+    }
   </script>
 </head>
 <body>
-  <a href="#" onclick="jumpWithParams(event,'index.html')">返回</a>
+  <div class="top-bar">
+    <a href="#" onclick="jumpWithParams(event, 'index.html')">← 返回</a>
+  </div>
+
   <div class="container">
-    <label for="action">操作：</label>
+
+    <label for="action">操作类型：</label>
     <select id="action" onchange="handleActionChange()">
       <option value="add">加入黑名单</option>
       <option value="remove">移除黑名单</option>
     </select>
 
     <label for="user_id">用户 ID：</label>
-    <input type="text" id="user_id">
+    <input type="text" id="user_id" placeholder="请输入用户 ID">
 
     <label for="note">备注：</label>
-    <input type="text" id="note">
+    <input type="text" id="note" placeholder="备注信息">
 
     <button onclick="submitForm()">提交</button>
   </div>
