@@ -142,7 +142,7 @@
 
             // 绑定事件监听器在循环内，避免作用域问题
             tr.querySelector('.details-btn').addEventListener('click', async () => {
-              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`);
+              const reason = prompt(`请输入备注（用户：${user.username}，ID：${user.user_id}）：`, user.note || '');
               if (reason !== null && reason.trim() !== "") {
                 await fetch('https://wandering-glitter-5345.completeforyou.workers.dev/api/markChatMember', {
                   method: 'POST',
